@@ -12,13 +12,13 @@ import java.util.List;
  */
 public class Personne {
 
-	private String id;
+	private int id;
 	private String nom;
 	private String prenom;
 	private String evalution;
 	private Personne lePere;
 	private List<Personne> lesFils;
-
+	private static int increment = 0;
 	/**
 	 * Constructeur de l'objet Personne
 	 * 
@@ -27,9 +27,9 @@ public class Personne {
 	 * @param prenom
 	 * @param evaluation
 	 */
-	public Personne(final String id, final String nom, final String prenom,
+	public Personne(final int id, final String nom, final String prenom,
 			final String evaluation, final Personne lePere) {
-		this.setId(id);
+		this.id = id;
 		this.setNom(nom);
 		this.setPrenom(prenom);
 		this.setEvalution(evaluation);
@@ -37,17 +37,26 @@ public class Personne {
 		this.setLesFils(new ArrayList<Personne>());
 	}
 
+	public Personne(final String nom, final String prenom,
+			final String evaluation, final Personne lePere) {
+		this.id = increment++;
+		this.setNom(nom);
+		this.setPrenom(prenom);
+		this.setEvalution(evaluation);
+		this.setLePere(lePere);
+		this.setLesFils(new ArrayList<Personne>());
+	}
 	/**
 	 * @return l'identifiant de la personne
 	 */
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
 	/**
 	 * @param id
 	 */
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
