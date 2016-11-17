@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,7 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class JFrameConnexion extends JFrame{
+import services.Connexion;
+
+public class JFrameConnexion extends JFrame implements ActionListener{
 
 	/**
 	 * 
@@ -38,7 +42,6 @@ public class JFrameConnexion extends JFrame{
 		panel_area.add(zoneTexte);
 		
 		panel_button.add(button);
-		
 		panel_button.setBackground(Color.gray);
 		
 		getContentPane().add(panel_area,BorderLayout.CENTER);
@@ -69,6 +72,14 @@ public class JFrameConnexion extends JFrame{
 
 	public int getJTextFieldContent() {
 		return Integer.parseInt(zoneTexte.getText());
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		
+		if(e.getSource() == button){
+			Connexion.login();
+		}
+		
 	}
 
 }
