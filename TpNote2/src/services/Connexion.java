@@ -25,14 +25,15 @@ public class Connexion {
 	 * @param id saisie par la personne.
 	 */
 	public static void login(JFrameConnexion c,int id){
-		DataMapperGenerique<Personne> p = new DataMapperGenerique<Personne>("personne", Personne.getFields(), Personne.class);
+		DataMapperGenerique<Personne> p = new DataMapperGenerique<Personne>("coo_personne", Personne.getFields(), Personne.class);
+		Personne per = null;
 		try {
-			p.findById(id);
+			per = p.findById(id);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
 		c.setVisible(false);
-		new JFramePrincipal(c);
+		new JFramePrincipal(c,per);
 	}
 
 	/**

@@ -4,6 +4,7 @@
 package vues;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +12,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import domaine.Personne;
 import services.Connexion;
 
 /**
@@ -26,25 +28,23 @@ public class JFramePrincipal extends JFrame implements ActionListener{
 	private JButton button;
 	private JFrame lastFrame;
 	
-	public JFramePrincipal(JFrame c){
+	public JFramePrincipal(JFrame c,Personne p){
 		lastFrame = c;
 		setTitle("Evaluation");
 		setSize(new Dimension(400,400));
 		setResizable(false);
-		setLayout(new BorderLayout());
+		setLayout(new CardLayout());
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
+		
+		add(new PanelInfoPersonne(p),BorderLayout.NORTH);
 		
 		button = new JButton();
 		button.setText("retour");
 		button.addActionListener(this);
 		
 		add(button,BorderLayout.SOUTH);
-		setVisibility(true);
-	}
-	
-	public void setVisibility(boolean b){
-		setVisible(b);
+		setVisible(true);
 	}
 
 	public void actionPerformed(ActionEvent e) {
