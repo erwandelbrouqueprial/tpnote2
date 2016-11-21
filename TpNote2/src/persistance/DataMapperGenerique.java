@@ -3,7 +3,11 @@ package persistance;
 import java.lang.reflect.Method;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Map;
+
+import domaine.Personne;
 
 /**
  * Classe DataMapperGenerique : elle permet le mapping et donc la persistance
@@ -179,6 +183,39 @@ public class DataMapperGenerique<T> {
 	 */
 	public void update(final T p) throws Exception {
 		// TODO : finir la m√†j g√©n√©rique
+	}
+	
+	/**
+	 *  Permet de retrouver un objet en base gr‚ce ‡ son identifiant.
+	 *  
+	 * @param id
+	 * @return T Un objet Correspondant au type de T gÈnÈrique
+	 * @throws SQLException
+	 */
+	public T findById(final int id) throws SQLException{
+		//On part du principe que pour tout les types d'objet l'identifiant est contenu dans un champ nommÈ "id"
+		String req = "SELECT * FROM "+table+" WHERE id = ?";
+		PreparedStatement ps = null;
+		try{
+			ps = DBConfig.getConnection().prepareStatement(req);
+		}catch(SQLException e){
+			System.out.println(e.getMessage());
+		}
+		ps.setInt(1, id);
+		ResultSet rs = null;
+		try{
+			rs = ps.executeQuery();
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		T t = null;
+		if(rs.next()){
+			if(t.getClass() == Personne.class){
+				t = (T) new Personne(1,rs.getString("nom"), rs.getString("prenom"), "evaluation", null);
+			}
+		}
+		return t;		
 	}
 
 	// TODO : cr√©er autres m√©thodes findWithCondition, etc..

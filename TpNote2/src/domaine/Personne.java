@@ -4,7 +4,9 @@
 package domaine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author six
@@ -135,4 +137,15 @@ public class Personne {
 		this.lesFils = lesFils;
 	}
 
+	/**
+	 * 
+	 * @return l'ensemble des champs présent dans la table personne
+	 */
+	public static Map<String, Class<?>> getFields(){
+		Map<String, Class<?>> fields = new HashMap<String, Class<?>>();
+		fields.put("id", String.class);
+		fields.put("nom", String.class);
+		fields.put("prenom", String.class);
+		return fields;
+	}
 }

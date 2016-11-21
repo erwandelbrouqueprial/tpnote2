@@ -29,7 +29,6 @@ public class JFrameConnexion extends JFrame implements ActionListener{
 	
 	public JFrameConnexion(){
 		
-		
 		setTitle("Evaluation");
 		setSize(new Dimension(400,400));
 		setResizable(false);
@@ -40,46 +39,49 @@ public class JFrameConnexion extends JFrame implements ActionListener{
 		panel_area.add(label);
 		zoneTexte.setColumns(10);
 		panel_area.add(zoneTexte);
-		
+		button.addActionListener(this);
 		panel_button.add(button);
 		panel_button.setBackground(Color.gray);
 		
 		getContentPane().add(panel_area,BorderLayout.CENTER);
 		getContentPane().add(panel_button,BorderLayout.SOUTH);
 
-		setVisibility(true);
-	}
-	
-	public void setVisibility(boolean b){
-		setVisible(b);
-	}
-	
-	public boolean saisieValide() {
-		try{
-			Integer.parseInt(zoneTexte.getText());
-			return true;
-		}catch(Exception e){
-			return false;
-		}
+		setVisible(true);
 	}
 
-
+	/**
+	 * Permet d'afficher une erreur sur la fenetre
+	 * @param string le message d'erreur
+	 */
 	public void showError(String string) {
 		panel_area.add(new JLabel(string));
 		validate();
 	}
 
-
-	public int getJTextFieldContent() {
-		return Integer.parseInt(zoneTexte.getText());
+	/**
+	 * Vérifie que la valeur entrée dans le JTextField est bien un entier (correspondant à un identifiant)
+	 * @return vrai si c'est un entier, sinon faux.
+	 */
+	public boolean isIntegerValue(){
+		try{
+			Integer.parseInt(zoneTexte.getText());
+			return true;
+		}catch(Exception e){
+			return false;
+		}	
 	}
 
+	/**
+	 *  Association d'une class service à une execution de bouton.
+	 */
 	public void actionPerformed(ActionEvent e) {
-		
 		if(e.getSource() == button){
-			Connexion.login();
+			if(isIntegerValue()){
+				Connexion.login(this,Integer.parseInt(zoneTexte.getText()));
+			}else{
+				showError("Erreur, veuillez saisir un entier.");
+			}
 		}
-		
 	}
 
 }
