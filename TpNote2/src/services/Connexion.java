@@ -36,14 +36,4 @@ public class Connexion {
 		new JFramePrincipal(c,per);
 	}
 
-	/**
-	 * Appel une frame et detruit l'ancienne.
-	 * @param current la fenetre actuelle
-	 * @param lastFrame la fenetre suivante 
-	 */
-	public static void callFrame(JFramePrincipal current,JFrame lastFrame) {
-		// TODO Auto-generated method stub
-		current.dispose();
-		lastFrame.setVisible(true);
-	}
 }

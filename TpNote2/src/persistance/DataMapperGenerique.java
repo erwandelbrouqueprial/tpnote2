@@ -202,7 +202,7 @@ public class DataMapperGenerique<T> {
 		
 		if(rs.next()){
 			if(this.maClasse == Personne.class){
-				return (T) new Personne(rs.getInt("id"),rs.getString("nom"), rs.getString("prenom"), "evaluation", null);
+				return (T) new Personne(rs.getInt("id"),rs.getString("nom"), rs.getString("prenom"), rs.getString("evaluation"), null);
 			}
 		}
 		return null;		
