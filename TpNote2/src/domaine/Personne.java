@@ -137,9 +137,12 @@ public class Personne {
 		this.lesFils = lesFils;
 	}
 
+	public String toString(){
+		return this.nom;
+	}
 	/**
 	 * 
-	 * @return l'ensemble des champs présent dans la table personne
+	 * @return l'ensemble des champs prï¿½sent dans la table personne
 	 */
 	public static Map<String, Class<?>> getFields(){
 		Map<String, Class<?>> fields = new HashMap<String, Class<?>>();

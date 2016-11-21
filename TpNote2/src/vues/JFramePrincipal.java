@@ -11,9 +11,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-import domaine.Personne;
 import services.Connexion;
+import domaine.Personne;
 
 /**
  * @author erwan
@@ -37,7 +38,9 @@ public class JFramePrincipal extends JFrame implements ActionListener{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		
-		add(new PanelInfoPersonne(p),BorderLayout.NORTH);
+		JPanel pan = new PanelInfoPersonne(p);
+		
+		add(pan,BorderLayout.NORTH);
 		
 		button = new JButton();
 		button.setText("retour");

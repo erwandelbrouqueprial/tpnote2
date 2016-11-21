@@ -59,7 +59,7 @@ public class JFrameConnexion extends JFrame implements ActionListener{
 	}
 
 	/**
-	 * Vérifie que la valeur entrée dans le JTextField est bien un entier (correspondant à un identifiant)
+	 * Vï¿½rifie que la valeur entrï¿½e dans le JTextField est bien un entier (correspondant ï¿½ un identifiant)
 	 * @return vrai si c'est un entier, sinon faux.
 	 */
 	public boolean isIntegerValue(){
@@ -72,12 +72,13 @@ public class JFrameConnexion extends JFrame implements ActionListener{
 	}
 
 	/**
-	 *  Association d'une class service à une execution de bouton.
+	 *  Association d'une class service ï¿½ une execution de bouton.
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == button){
 			if(isIntegerValue()){
-				Connexion.login(this,Integer.parseInt(zoneTexte.getText()));
+				int val = Integer.parseInt(zoneTexte.getText());
+				Connexion.login(this,val);
 			}else{
 				showError("Erreur, veuillez saisir un entier.");
 			}

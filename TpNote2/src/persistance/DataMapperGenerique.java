@@ -186,36 +186,26 @@ public class DataMapperGenerique<T> {
 	}
 	
 	/**
-	 *  Permet de retrouver un objet en base grâce à son identifiant.
+	 *  Permet de retrouver un objet en base grï¿½ce ï¿½ son identifiant.
 	 *  
 	 * @param id
-	 * @return T Un objet Correspondant au type de T générique
+	 * @return T Un objet Correspondant au type de T gï¿½nï¿½rique
 	 * @throws SQLException
 	 */
 	public T findById(final int id) throws SQLException{
-		//On part du principe que pour tout les types d'objet l'identifiant est contenu dans un champ nommé "id"
+		//On part du principe que pour tout les types d'objet l'identifiant est contenu dans un champ nommï¿½ "id"
 		String req = "SELECT * FROM "+table+" WHERE id = ?";
-		PreparedStatement ps = null;
-		try{
-			ps = DBConfig.getConnection().prepareStatement(req);
-		}catch(SQLException e){
-			System.out.println(e.getMessage());
-		}
-		ps.setInt(1, id);
-		ResultSet rs = null;
-		try{
-			rs = ps.executeQuery();
-		}catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+		PreparedStatement ps = DBConfig.getConnection().prepareStatement(req);
 
-		T t = null;
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+		
 		if(rs.next()){
-			if(t.getClass() == Personne.class){
-				t = (T) new Personne(1,rs.getString("nom"), rs.getString("prenom"), "evaluation", null);
+			if(this.maClasse == Personne.class){
+				return (T) new Personne(rs.getInt("id"),rs.getString("nom"), rs.getString("prenom"), "evaluation", null);
 			}
 		}
-		return t;		
+		return null;		
 	}
 
 	// TODO : crÃ©er autres mÃ©thodes findWithCondition, etc..

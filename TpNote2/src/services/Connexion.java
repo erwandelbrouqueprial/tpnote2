@@ -20,7 +20,7 @@ import vues.JFramePrincipal;
 public class Connexion {
 	
 	/**
-	 * permet une connexion à la base de données
+	 * permet une connexion ï¿½ la base de donnï¿½es
 	 * @param c la fenetre de connexion
 	 * @param id saisie par la personne.
 	 */

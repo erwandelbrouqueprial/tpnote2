@@ -1,2 +1,5 @@
 language: java
-ant test
+
+script: 
+  - javac TpNote2/src/domaine/Personne.java
+  
