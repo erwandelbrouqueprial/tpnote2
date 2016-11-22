@@ -13,8 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import services.Connexion;
-import domaine.Personne;
+import domaine.IPersonne;
 
 /**
  * @author erwan
@@ -33,7 +32,7 @@ public class PanelInfoPersonne extends JPanel implements ActionListener{
 	private JFrame last;
 	private JFrame current;
 	
-	public PanelInfoPersonne(Personne p,JFrame last, JFrame current){
+	public PanelInfoPersonne(IPersonne p,JFrame last, JFrame current){
 		this.last = last;
 		this.current = current;
 		setLayout(new BorderLayout());
@@ -44,7 +43,8 @@ public class PanelInfoPersonne extends JPanel implements ActionListener{
 		b1.add(pre);
 		JLabel eval = new JLabel("votre évaluation: "+p.getEvalution());
 		b1.add(eval);
-		
+		JLabel pere = new JLabel("Votre père: "+p.getLePere().getNom());
+		b1.add(pere);
 		btnAn = new JPanel();
 		
 		add(b1,BorderLayout.WEST);

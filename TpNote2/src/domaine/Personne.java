@@ -12,14 +12,14 @@ import java.util.Map;
  * @author six
  * 
  */
-public class Personne {
+public class Personne implements IPersonne {
 
 	private int id;
 	private String nom;
 	private String prenom;
 	private String evalution;
-	private Personne lePere;
-	private List<Personne> lesFils;
+	private IPersonne a_pour_pere;
+	private List<IPersonne> lesFils;
 	private static int increment = 0;
 	/**
 	 * Constructeur de l'objet Personne
@@ -36,7 +36,7 @@ public class Personne {
 		this.setPrenom(prenom);
 		this.setEvalution(evaluation);
 		this.setLePere(lePere);
-		this.setLesFils(new ArrayList<Personne>());
+		this.setLesFils(new ArrayList<IPersonne>());
 	}
 
 	public Personne(final String nom, final String prenom,
@@ -46,97 +46,95 @@ public class Personne {
 		this.setPrenom(prenom);
 		this.setEvalution(evaluation);
 		this.setLePere(lePere);
-		this.setLesFils(new ArrayList<Personne>());
+		this.setLesFils(new ArrayList<IPersonne>());
 	}
-	/**
-	 * @return l'identifiant de la personne
+	/* (non-Javadoc)
+	 * @see domaine.IIPersonne#getId()
 	 */
 	public int getId() {
 		return id;
 	}
 
-	/**
-	 * @param id
+	/* (non-Javadoc)
+	 * @see domaine.IIPersonne#setId(int)
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
-	/**
-	 * @return le nom de la personne
+	/* (non-Javadoc)
+	 * @see domaine.IIPersonne#getNom()
 	 */
 	public String getNom() {
 		return nom;
 	}
 
-	/**
-	 * @param nom
+	/* (non-Javadoc)
+	 * @see domaine.IIPersonne#setNom(java.lang.String)
 	 */
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
 
-	/**
-	 * @return le prenom de la personne
+	/* (non-Javadoc)
+	 * @see domaine.IIPersonne#getPrenom()
 	 */
 	public String getPrenom() {
 		return prenom;
 	}
 
-	/**
-	 * @param prenom
+	/* (non-Javadoc)
+	 * @see domaine.IIPersonne#setPrenom(java.lang.String)
 	 */
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
 	}
 
-	/**
-	 * @return l'évaluation de la personne
+	/* (non-Javadoc)
+	 * @see domaine.IIPersonne#getEvalution()
 	 */
 	public String getEvalution() {
 		return evalution;
 	}
 
-	/**
-	 * @param evalution
+	/* (non-Javadoc)
+	 * @see domaine.IIPersonne#setEvalution(java.lang.String)
 	 */
 	public void setEvalution(String evalution) {
 		this.evalution = evalution;
 	}
 
-	/**
-	 * @return l'objet Personne qui correspond au père de la personne (le père
-	 *         étant celui qui évalue la personne dans son activité
-	 *         professionnelle)
+	/* (non-Javadoc)
+	 * @see domaine.IIPersonne#getLePere()
 	 */
-	public Personne getLePere() {
-		return lePere;
+	public IPersonne getLePere() {
+		return a_pour_pere;
 	}
 
-	/**
-	 * @param lePere
+	/* (non-Javadoc)
+	 * @see domaine.IIPersonne#setLePere(domaine.IPersonne)
 	 */
-	public void setLePere(Personne lePere) {
-		this.lePere = lePere;
+	public void setLePere(IPersonne lePere) {
+		this.a_pour_pere = lePere;
 	}
 
-	/**
-	 * @return l'ensemble des objets Personne qui correspondent au fils de la
-	 *         personne (les fils d'une personne sont les personnes qu'elle
-	 *         évalue). Il est possible que la personne n'évalue personne et
-	 *         qu'elle n'a donc pas de fils.
+	/* (non-Javadoc)
+	 * @see domaine.IIPersonne#getLesFils()
 	 */
-	public List<Personne> getLesFils() {
+	public List<IPersonne> getLesFils() {
 		return lesFils;
 	}
 
-	/**
-	 * @param lesFils
+	/* (non-Javadoc)
+	 * @see domaine.IIPersonne#setLesFils(java.util.List)
 	 */
-	public void setLesFils(List<Personne> lesFils) {
+	public void setLesFils(List<IPersonne> lesFils) {
 		this.lesFils = lesFils;
 	}
 
+	/* (non-Javadoc)
+	 * @see domaine.IIPersonne#toString()
+	 */
 	public String toString(){
 		return this.nom;
 	}
@@ -146,9 +144,11 @@ public class Personne {
 	 */
 	public static Map<String, Class<?>> getFields(){
 		Map<String, Class<?>> fields = new HashMap<String, Class<?>>();
-		fields.put("id", String.class);
+		fields.put("id", Integer.class);
 		fields.put("nom", String.class);
 		fields.put("prenom", String.class);
+		fields.put("evaluation",String.class);
+		fields.put("a_pou_pere", Integer.class);
 		return fields;
 	}
 }

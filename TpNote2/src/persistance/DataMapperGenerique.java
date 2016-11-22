@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import domaine.IPersonne;
 import domaine.Personne;
 
 /**
@@ -23,6 +24,7 @@ import domaine.Personne;
  */
 public class DataMapperGenerique<T> {
 
+	private HashMap<Integer,WeakReference<T>> reference; 
 	private Map<String, Class<?>> fields;
 	private String table;
 	private Class<?> maClasse;
@@ -42,6 +44,7 @@ public class DataMapperGenerique<T> {
 		this.maClasse = maClasse;
 		this.table = table;
 		this.fields = fields;
+		reference = new HashMap<Integer, WeakReference<T>>();
 	}
 
 	/**
@@ -198,6 +201,11 @@ public class DataMapperGenerique<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public T findById(final int id) throws SQLException{
+
+		if(reference.containsKey(id)){
+			System.out.println("si mon objet de type "+maClasse+" existe je le retourne");
+			return reference.get(id).get();
+		}
 		//On part du principe que pour tout les types d'objet l'identifiant est contenu dans un champ nomm� "id"
 		System.out.println("on recherche par l'id");
 		String req = "SELECT * FROM "+table+" WHERE id = ?";
@@ -208,46 +216,47 @@ public class DataMapperGenerique<T> {
 		
 		if(rs.next()){
 			if(this.maClasse == Personne.class){
-				PersonneFactory fp = new PersonneFactory();
-				Map<Integer, Personne> lp = new VirtualProxyGeneriqueBuilder<Map<Integer,Personne>>(Map.class, fp).getProxy();
+				System.out.println("je en contient pas "+rs.getString("id")+" je le créer");
 			
-				if(!lp.containsKey(rs.getString("id"))){
-					System.out.println("je en contient pas "+rs.getString("id")+" je le créer");
-					
-					Personne p = new Personne(rs.getInt("id"),rs.getString("nom"), rs.getString("prenom"), rs.getString("evaluation"), (Personne) findById(rs.getInt("id")));
-					lp.put(p.getId(), p);
-				}else{
-					System.out.println("Je le contient déjà donc je le retourne");
-					return (T) lp.get(rs.getInt("id"));
-					
-				}
+				Personne p = new Personne(rs.getInt("id"),rs.getString("nom"), rs.getString("prenom"), rs.getString("evaluation"), null);
+					p.setLePere(new VirtualProxyGeneriqueBuilder< IPersonne > (IPersonne.class, new PersonneFactory(rs.getInt("a_pour_pere"))).getProxy());
+				p.setLesFils(new VirtualProxyGeneriqueBuilder< List<IPersonne> > (List.class, new ListFilsPersonne(p.getId())).getProxy());
+				return (T) p;
 			}
 		}
 		return null;		
 	}
-
-	public Map<Integer, T> findAll() throws SQLException {
-		System.out.println("on cherche tout le monde");
-		Map<Integer, T> t = null ;
-		String req = "SELECT * FROM "+table;
+	@SuppressWarnings("unchecked")
+	public List<T> findFilsOf(final int id) throws SQLException {
+		//On part du principe que pour tout les types d'objet l'identifiant est contenu dans un champ nomm� "id"
+		System.out.println("on recherche les fils");
+		String req = "SELECT * FROM "+table+" WHERE a_pour_pere = ?";
 		PreparedStatement ps = DBConfig.getConnection().prepareStatement(req);
-		
+		List<T> t = new ArrayList<T>();
+		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
-		if(this.maClasse == Personne.class){
-			PersonneFactory fp = new PersonneFactory();
-			Map<Integer, Personne> lp = new VirtualProxyGeneriqueBuilder<Map<Integer,Personne>>(Map.class, fp).getProxy();
 		
-			while(rs.next()){
-				if(lp.containsKey(rs.getString("id"))== false){
-					System.out.println("je ne contient pas "+rs.getString("id"));
-					Personne p = new Personne(rs.getInt("id"),rs.getString("nom"), rs.getString("prenom"), rs.getString("evaluation"),(Personne) findById(rs.getInt("id")));
-					t.put(p.getId(), (T) p);
+		while(rs.next()){
+			if(reference.containsKey(rs.getInt("id"))){
+				System.out.println("si le fils existe je l'ajoute ");
+				t.add(reference.get(rs.getInt("id")).get());
+			}else{
+				System.out.println("le fils n'existe pas, je le créer et l'ajoute");
+				if(this.maClasse == Personne.class){
+					System.out.println("je en contient pas "+rs.getString("id")+" je le créer");
+					
+					Personne p = new Personne(rs.getInt("id"),rs.getString("nom"), rs.getString("prenom"), rs.getString("evaluation"), null);
+					p.setLePere(new VirtualProxyGeneriqueBuilder< IPersonne > (IPersonne.class, new PersonneFactory(id)).getProxy());
+					p.setLesFils(new VirtualProxyGeneriqueBuilder< List<IPersonne> > (List.class, new ListFilsPersonne(p.getId())).getProxy());
+					t.add((T)p);
 				}
-				
 			}
 		}
-		return t;	
+		
+		return t;
 	}
+
+	
 
 	// TODO : créer autres méthodes findWithCondition, etc..
 }

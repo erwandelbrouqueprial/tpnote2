@@ -4,10 +4,8 @@
 package services;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 
-import javax.swing.JFrame;
-
+import domaine.IPersonne;
 import domaine.Personne;
 import persistance.DataMapperGenerique;
 import vues.JFrameConnexion;
@@ -26,7 +24,7 @@ public class Connexion {
 	 */
 	public static void login(JFrameConnexion c,int id){
 		DataMapperGenerique<Personne> p = new DataMapperGenerique<Personne>("coo_personne", Personne.getFields(), Personne.class);
-		Personne per = null;
+		IPersonne per = null;
 		try {
 			per = p.findById(id);
 		} catch (SQLException e) {
