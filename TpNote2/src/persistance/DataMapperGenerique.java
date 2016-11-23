@@ -13,6 +13,7 @@ import java.util.Map;
 
 import domaine.IPersonne;
 import domaine.Personne;
+import services.UnitOfWork;
 
 /**
  * Classe DataMapperGenerique : elle permet le mapping et donc la persistance
@@ -217,7 +218,6 @@ public class DataMapperGenerique<T extends domaine.IPersonne> {
 		// La construction de la requête préparée est terminée. On peut la
 		// passer dans le prepareStatement.
 		PreparedStatement ps = DBConfig.getConnection().prepareStatement(req);
-		ps.setInt(1, p.getId());
 		
 		int i = 0;
 		// On récupére le nom des champs de la table dans lesquels on fait une
@@ -226,6 +226,7 @@ public class DataMapperGenerique<T extends domaine.IPersonne> {
 			i++;
 			String key = e.getKey(); // nom du champ
 			// On construit le nom du getter correspondant au nom du champ
+			System.out.println("m "+key);
 			String name = "get" + key.substring(0, 1).toUpperCase()
 					+ key.substring(1);
 			Method m = maClasse.getMethod(name);
@@ -236,20 +237,29 @@ public class DataMapperGenerique<T extends domaine.IPersonne> {
 
 			if (e.getValue() != r.getClass()) {
 				// TODO: gérer exception lorsque la méthode n'existe pas dans
-				// l'objet P
+				
 			}
 			// On remplie les "?" de la requête préparée en fonction du type des
 			// champs
+			
 			if (e.getValue() == String.class) {
+				//System.out.println("string " +r);
 				ps.setString(i, (String) r);
 			} else if (e.getValue() == Integer.class) {
+				//System.out.println("int "+r);
 				ps.setInt(i, (Integer) r);
 			} else if (e.getValue() == Date.class) {
+				//System.out.println("date "+r);
 				ps.setDate(i, (Date) r);
 			} else if (e.getValue() == Boolean.class) {
+				//System.out.println("bool "+r);
 				ps.setBoolean(i, (Boolean) r);
+			} else if (e.getValue() == Personne.class){
+				
 			}
 		}
+		ps.setInt(++i, p.getId());
+		//System.out.println(ps);
 		ps.executeUpdate();
 	}
 	
@@ -280,8 +290,9 @@ public class DataMapperGenerique<T extends domaine.IPersonne> {
 				System.out.println("je ne contient pas "+rs.getString("id")+" on le crée");
 			
 				Personne p = new Personne(rs.getInt("id"),rs.getString("nom"), rs.getString("prenom"), rs.getString("evaluation"), null);
-					p.setLePere(new VirtualProxyGeneriqueBuilder< IPersonne > (IPersonne.class, new PersonneFactory(rs.getInt("a_pour_pere"))).getProxy());
+					p.setA_pour_pere(new VirtualProxyGeneriqueBuilder< IPersonne > (IPersonne.class, new PersonneFactory(rs.getInt("a_pour_pere"))).getProxy());
 				p.setLesFils(new VirtualProxyGeneriqueBuilder< List<IPersonne> > (List.class, new ListFilsPersonne(p.getId())).getProxy());
+				p.add(UnitOfWork.getInstance());
 				return (T) p;
 			}
 		}
@@ -307,8 +318,9 @@ public class DataMapperGenerique<T extends domaine.IPersonne> {
 					System.out.println("je en contient pas "+rs.getString("id")+" je le créer");
 					
 					Personne p = new Personne(rs.getInt("id"),rs.getString("nom"), rs.getString("prenom"), rs.getString("evaluation"), null);
-					p.setLePere(new VirtualProxyGeneriqueBuilder< IPersonne > (IPersonne.class, new PersonneFactory(id)).getProxy());
+					p.setA_pour_pere(new VirtualProxyGeneriqueBuilder< IPersonne > (IPersonne.class, new PersonneFactory(id)).getProxy());
 					p.setLesFils(new VirtualProxyGeneriqueBuilder< List<IPersonne> > (List.class, new ListFilsPersonne(p.getId())).getProxy());
+					p.add(UnitOfWork.getInstance());
 					t.add((T)p);
 				}
 			}

@@ -2,7 +2,10 @@ package domaine;
 
 import java.util.List;
 
-public interface IPersonne {
+import services.ObservablePersonne;
+import services.VisitablePersonne;
+
+public interface IPersonne extends ObservablePersonne,VisitablePersonne{
 
 	/**
 	 * @return l'identifiant de la personne
@@ -37,24 +40,24 @@ public interface IPersonne {
 	/**
 	 * @return l'évaluation de la personne
 	 */
-	String getEvalution();
+	String getEvaluation();
 
 	/**
 	 * @param evalution
 	 */
-	void setEvalution(String evalution);
+	void setEvaluation(String evalution);
 
 	/**
 	 * @return l'objet Personne qui correspond au père de la personne (le père
 	 *         étant celui qui évalue la personne dans son activité
 	 *         professionnelle)
 	 */
-	IPersonne getLePere();
+	IPersonne getA_pour_pere();
 
 	/**
 	 * @param lePere
 	 */
-	void setLePere(IPersonne lePere);
+	void setA_pour_pere(IPersonne lePere);
 
 	/**
 	 * @return l'ensemble des objets Personne qui correspondent au fils de la
