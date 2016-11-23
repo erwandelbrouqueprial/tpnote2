@@ -216,7 +216,7 @@ public class DataMapperGenerique<T> {
 		
 		if(rs.next()){
 			if(this.maClasse == Personne.class){
-				System.out.println("je en contient pas "+rs.getString("id")+" je le créer");
+				System.out.println("je ne contient pas "+rs.getString("id")+" on le crée");
 			
 				Personne p = new Personne(rs.getInt("id"),rs.getString("nom"), rs.getString("prenom"), rs.getString("evaluation"), null);
 					p.setLePere(new VirtualProxyGeneriqueBuilder< IPersonne > (IPersonne.class, new PersonneFactory(rs.getInt("a_pour_pere"))).getProxy());

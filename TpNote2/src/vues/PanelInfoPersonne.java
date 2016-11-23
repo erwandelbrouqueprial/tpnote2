@@ -41,10 +41,21 @@ public class PanelInfoPersonne extends JPanel implements ActionListener{
 		b1.add(nom);
 		JLabel pre = new JLabel("votre prenom: "+p.getPrenom());
 		b1.add(pre);
-		JLabel eval = new JLabel("votre évaluation: "+p.getEvalution());
+		JLabel eval = null;
+		if(!p.getEvalution().isEmpty()){
+			eval = new JLabel("votre évaluation: "+p.getEvalution());
+		} else {
+			eval = new JLabel("votre évaluation: Aucune évaluation");
+		}
 		b1.add(eval);
-		JLabel pere = new JLabel("Votre père: "+p.getLePere().getNom());
-		b1.add(pere);
+		JLabel LabelPere = null;
+		IPersonne pere = p.getLePere();
+		if(pere == null){
+			LabelPere = new JLabel("Votre père: "+p.getLePere().getNom());
+		}else{
+			LabelPere = new JLabel("Votre père: Vous êtes orphelin");
+		}
+		b1.add(LabelPere);
 		btnAn = new JPanel();
 		
 		add(b1,BorderLayout.WEST);
