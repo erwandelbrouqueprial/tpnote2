@@ -22,7 +22,7 @@ import domaine.Personne;
  * 
  * @param <T>
  */
-public class DataMapperGenerique<T> {
+public class DataMapperGenerique<T extends domaine.IPersonne> {
 
 	private HashMap<Integer,WeakReference<T>> reference; 
 	private Map<String, Class<?>> fields;
@@ -189,13 +189,74 @@ public class DataMapperGenerique<T> {
 	 * @throws Exception
 	 */
 	public void update(final T p) throws Exception {
-		// TODO : finir la màj générique
+
+		boolean first = true;
+		// On construit une requête préparée pour une suppression en base
+		String req = " SET ";
+
+		for (Map.Entry<String, Class<?>> e : fields.entrySet()) {
+			if (!first) {
+				// Si le champ n'est pas le premier de la liste, on ajoute des
+				// virgules dans la requête préparée (entre les "?") et entre
+				// les champs du " INSERT INTO (...)"
+				req += ", ";
+			}
+
+			req += e.getKey() + " = ?";
+			first = false;
+		}
+		
+		// UPDATE personne SET nom=?, prenom=? WHERE id=?
+		// 1 <== p.getNom() // avec la reflexion
+		// 2 <== p.getPrenom() // avec la reflexion
+		// 3 <== p.getId(); // pas besoin de la reflexion car T implements IDomainObject 
+		req = "UPDATE " + table + req + " WHERE id = ?";
+		
+		System.out.println(req);
+
+		// La construction de la requête préparée est terminée. On peut la
+		// passer dans le prepareStatement.
+		PreparedStatement ps = DBConfig.getConnection().prepareStatement(req);
+		ps.setInt(1, p.getId());
+		
+		int i = 0;
+		// On récupére le nom des champs de la table dans lesquels on fait une
+		// insertion
+		for (Map.Entry<String, Class<?>> e : fields.entrySet()) {
+			i++;
+			String key = e.getKey(); // nom du champ
+			// On construit le nom du getter correspondant au nom du champ
+			String name = "get" + key.substring(0, 1).toUpperCase()
+					+ key.substring(1);
+			Method m = maClasse.getMethod(name);
+			// On fait appel à la méthode construite sur l'objet passé en
+			// paramètre. On construit un objet qui correspond au resultat de
+			// l'execution du getter.
+			Object r = m.invoke(p);
+
+			if (e.getValue() != r.getClass()) {
+				// TODO: gérer exception lorsque la méthode n'existe pas dans
+				// l'objet P
+			}
+			// On remplie les "?" de la requête préparée en fonction du type des
+			// champs
+			if (e.getValue() == String.class) {
+				ps.setString(i, (String) r);
+			} else if (e.getValue() == Integer.class) {
+				ps.setInt(i, (Integer) r);
+			} else if (e.getValue() == Date.class) {
+				ps.setDate(i, (Date) r);
+			} else if (e.getValue() == Boolean.class) {
+				ps.setBoolean(i, (Boolean) r);
+			}
+		}
+		ps.executeUpdate();
 	}
 	
 	/**
 	 *  Permet de retrouver un objet en base gr�ce � son identifiant.
 	 *  
-	 * @param id
+	 * @param id l'identifiant de l'objet que l'on cherche
 	 * @return T Un objet Correspondant au type de T g�n�rique
 	 * @throws SQLException
 	 */
