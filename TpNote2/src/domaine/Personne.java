@@ -12,8 +12,8 @@ import services.ObservateurPersonne;
 import services.VisiteurPersonne;
 
 /**
- * @author six
- * 
+ * @author six Classe de l'objet Personne. Elle implémente l'interface IPersonne
+ *         afin de pouvoir être par la suite observée et visitée.
  */
 public class Personne implements IPersonne {
 
@@ -25,6 +25,7 @@ public class Personne implements IPersonne {
 	private IPersonne a_pour_pere;
 	private List<IPersonne> lesFils;
 	private static int increment = 0;
+
 	/**
 	 * Constructeur de l'objet Personne
 	 * 
@@ -44,6 +45,14 @@ public class Personne implements IPersonne {
 		this.obs = new ArrayList<ObservateurPersonne>();
 	}
 
+	/**
+	 * Autre constructeur de l'objet Personne
+	 * 
+	 * @param nom
+	 * @param prenom
+	 * @param evaluation
+	 * @param lePere
+	 */
 	public Personne(final String nom, final String prenom,
 			final String evaluation, final Personne lePere) {
 		this.id = increment++;
@@ -54,28 +63,37 @@ public class Personne implements IPersonne {
 		this.lesFils = new ArrayList<IPersonne>();
 		this.obs = new ArrayList<ObservateurPersonne>();
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see domaine.IIPersonne#getId()
 	 */
 	public int getId() {
 		return id;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see domaine.IIPersonne#setId(int)
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see domaine.IIPersonne#getNom()
 	 */
 	public String getNom() {
 		return nom;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see domaine.IIPersonne#setNom(java.lang.String)
 	 */
 	public void setNom(String nom) {
@@ -83,14 +101,18 @@ public class Personne implements IPersonne {
 		notifier();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see domaine.IIPersonne#getPrenom()
 	 */
 	public String getPrenom() {
 		return prenom;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see domaine.IIPersonne#setPrenom(java.lang.String)
 	 */
 	public void setPrenom(String prenom) {
@@ -98,14 +120,18 @@ public class Personne implements IPersonne {
 		notifier();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see domaine.IIPersonne#getEvalution()
 	 */
 	public String getEvaluation() {
 		return evaluation;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see domaine.IIPersonne#setEvalution(java.lang.String)
 	 */
 	public void setEvaluation(String evalution) {
@@ -113,64 +139,90 @@ public class Personne implements IPersonne {
 		notifier();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see domaine.IIPersonne#getLePere()
 	 */
 	public IPersonne getA_pour_pere() {
 		return a_pour_pere;
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see domaine.IIPersonne#setLePere(domaine.IPersonne)
 	 */
 	public void setA_pour_pere(IPersonne lePere) {
 		this.a_pour_pere = lePere;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see domaine.IIPersonne#getLesFils()
 	 */
 	public List<IPersonne> getLesFils() {
 		return lesFils;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see domaine.IIPersonne#setLesFils(java.util.List)
 	 */
 	public void setLesFils(List<IPersonne> lesFils) {
 		this.lesFils = lesFils;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see domaine.IIPersonne#toString()
 	 */
-	public String toString(){
+	public String toString() {
 		return this.nom;
 	}
+
 	/**
 	 * 
-	 * @return l'ensemble des champs pr�sent dans la table personne
+	 * @return l'ensemble des champs presents dans la table personne
 	 */
-	public static Map<String, Class<?>> getFields(){
+	public static Map<String, Class<?>> getFields() {
 		Map<String, Class<?>> fields = new HashMap<String, Class<?>>();
 		fields.put("id", Integer.class);
 		fields.put("nom", String.class);
 		fields.put("prenom", String.class);
-		fields.put("evaluation",String.class);
+		fields.put("evaluation", String.class);
 		return fields;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see services.ObservablePersonne#add(services.ObservateurPersonne)
+	 */
 	public void add(ObservateurPersonne op) {
 		obs.add(op);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see services.ObservablePersonne#notifier()
+	 */
 	public void notifier() {
-		for (ObservateurPersonne o : obs){
+		for (ObservateurPersonne o : obs) {
 			o.action(this);
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see services.VisitablePersonne#accepter(services.VisiteurPersonne)
+	 */
 	public void accepter(VisiteurPersonne v) {
 		v.visiter(this);
 	}

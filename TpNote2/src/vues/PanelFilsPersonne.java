@@ -1,6 +1,3 @@
-/**
- * 
- */
 package vues;
 
 import java.awt.Dimension;
@@ -25,14 +22,12 @@ import domaine.IPersonne;
 import services.UnitOfWork;
 
 /**
- * @author admin
- *
+ * @author admin Panel de l'application représentant la liste des fils d'une
+ *         personne
  */
-public class PanelFilsPersonne extends JPanel implements ListSelectionListener, ActionListener, KeyListener {
+public class PanelFilsPersonne extends JPanel implements ListSelectionListener,
+		ActionListener, KeyListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private DefaultListModel<IPersonne> listModel;
 	private JLabel label;
@@ -41,6 +36,11 @@ public class PanelFilsPersonne extends JPanel implements ListSelectionListener, 
 	private JTextField saisie;
 	private JButton valider;
 
+	/**
+	 * Construction de la fenêtre
+	 * 
+	 * @param p
+	 */
 	public PanelFilsPersonne(IPersonne p) {
 		setLayout(new GridBagLayout());
 		listModel = new DefaultListModel<IPersonne>();
@@ -86,14 +86,32 @@ public class PanelFilsPersonne extends JPanel implements ListSelectionListener, 
 		add(valider, gbc);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event
+	 * .ListSelectionEvent)
+	 */
 	public void valueChanged(ListSelectionEvent e) {
 		setLabel(listModel.get(listFils.getSelectedIndex()));
 	}
 
+	/**
+	 * Changement du label lorsqu'on selectionne une autre personne
+	 * 
+	 * @param p
+	 */
 	public void setLabel(IPersonne p) {
 		label.setText("Évaluation de " + p.getNom() + ":");
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == valider) {
 			System.out.println("on commit");
@@ -102,21 +120,26 @@ public class PanelFilsPersonne extends JPanel implements ListSelectionListener, 
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
+	 */
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == saisie) {
-			System.out.println("modification de l'évaluation de " + listModel.get(listFils.getSelectedIndex()).getNom()
+			System.out.println("modification de l'évaluation de "
+					+ listModel.get(listFils.getSelectedIndex()).getNom()
 					+ " avec " + saisie.getText());
-			listModel.get(listFils.getSelectedIndex()).setEvaluation(saisie.getText());
+			listModel.get(listFils.getSelectedIndex()).setEvaluation(
+					saisie.getText());
 		}
 	}
 
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
+		// Méthode non implémentée de l'interface KeyListener
 	}
 
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
+		// Méthode non implémentée de l'interface KeyListener
 	}
 }

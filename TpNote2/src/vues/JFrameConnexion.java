@@ -15,26 +15,29 @@ import javax.swing.JTextField;
 
 import services.Connexion;
 
-public class JFrameConnexion extends JFrame implements ActionListener{
+/**
+ * @author six Classe représentant la fenêtre de connexion
+ */
+public class JFrameConnexion extends JFrame implements ActionListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1511263417777898704L;
 	private JPanel panel_area = new JPanel();
 	private JPanel panel_button = new JPanel();
 	private JLabel label = new JLabel("identifiant de connexion:");
 	private JTextField zoneTexte = new JTextField();
 	private JButton button = new JButton("connexion");
-	
-	public JFrameConnexion(){
-		
+
+	/**
+	 * Construction de la fenêtre de connexion
+	 */
+	public JFrameConnexion() {
+
 		setTitle("Evaluation");
-		setSize(new Dimension(400,400));
+		setSize(new Dimension(400, 400));
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		
+
 		panel_area.setLayout(new FlowLayout());
 		panel_area.add(label);
 		zoneTexte.setColumns(10);
@@ -42,16 +45,18 @@ public class JFrameConnexion extends JFrame implements ActionListener{
 		button.addActionListener(this);
 		panel_button.add(button);
 		panel_button.setBackground(Color.gray);
-		
-		getContentPane().add(panel_area,BorderLayout.CENTER);
-		getContentPane().add(panel_button,BorderLayout.SOUTH);
+
+		getContentPane().add(panel_area, BorderLayout.CENTER);
+		getContentPane().add(panel_button, BorderLayout.SOUTH);
 
 		setVisible(true);
 	}
 
 	/**
 	 * Permet d'afficher une erreur sur la fenetre
-	 * @param string le message d'erreur
+	 * 
+	 * @param string
+	 *            le message d'erreur
 	 */
 	public void showError(String string) {
 		panel_area.add(new JLabel(string));
@@ -59,31 +64,32 @@ public class JFrameConnexion extends JFrame implements ActionListener{
 	}
 
 	/**
-	 * V�rifie que la valeur entr�e dans le JTextField est bien un entier (correspondant � un identifiant)
+	 * Verifie que la valeur entree dans le JTextField est bien un entier
+	 * (correspondant a un identifiant)
+	 * 
 	 * @return vrai si c'est un entier, sinon faux.
 	 */
-	public boolean isIntegerValue(){
-		try{
+	public boolean isIntegerValue() {
+		try {
 			Integer.parseInt(zoneTexte.getText());
 			return true;
-		}catch(Exception e){
+		} catch (Exception e) {
 			return false;
-		}	
+		}
 	}
 
 	/**
-	 *  Association d'une class service � une execution de bouton.
+	 * Association d'une class service a une execution de bouton.
 	 */
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == button){
-			if(isIntegerValue()){
+		if (e.getSource() == button) {
+			if (isIntegerValue()) {
 				int val = Integer.parseInt(zoneTexte.getText());
-				Connexion.login(this,val);
-			}else{
+				Connexion.login(this, val);
+			} else {
 				showError("Erreur, veuillez saisir un entier.");
 			}
 		}
 	}
 
 }
-

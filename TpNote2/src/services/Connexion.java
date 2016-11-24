@@ -12,18 +12,21 @@ import vues.JFrameConnexion;
 import vues.JFramePrincipal;
 
 /**
- * @author delbrouquepri
- *
+ * @author delbrouquepri Classe permettant la connexion à la base de données
  */
 public class Connexion {
-	
+
 	/**
-	 * permet une connexion � la base de donn�es
-	 * @param c la fenetre de connexion
-	 * @param id saisie par la personne.
+	 * permet une connexion a la base de donnees
+	 * 
+	 * @param c
+	 *            la fenetre de connexion
+	 * @param id
+	 *            saisie par la personne.
 	 */
-	public static void login(JFrameConnexion c,int id){
-		DataMapperGenerique<Personne> p = new DataMapperGenerique<Personne>("coo_personne", Personne.getFields(), Personne.class);
+	public static void login(JFrameConnexion c, int id) {
+		DataMapperGenerique<Personne> p = new DataMapperGenerique<Personne>(
+				"coo_personne", Personne.getFields(), Personne.class);
 		IPersonne per = null;
 		try {
 			per = p.findById(id);
@@ -31,7 +34,7 @@ public class Connexion {
 			System.out.println(e.getMessage());
 		}
 		c.setVisible(false);
-		new JFramePrincipal(c,per);
+		new JFramePrincipal(c, per);
 	}
 
 }

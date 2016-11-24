@@ -25,7 +25,7 @@ import services.UnitOfWork;
  */
 public class DataMapperGenerique<T extends domaine.IPersonne> {
 
-	private HashMap<Integer,WeakReference<T>> reference; 
+	private HashMap<Integer, WeakReference<T>> reference;
 	private Map<String, Class<?>> fields;
 	private String table;
 	private Class<?> maClasse;
@@ -41,7 +41,8 @@ public class DataMapperGenerique<T extends domaine.IPersonne> {
 	 *            classe de l'objet java dont on veut insérer ses données en
 	 *            base
 	 */
-	public DataMapperGenerique(final String table,final Map<String, Class<?>> fields, final Class<?> maClasse) {
+	public DataMapperGenerique(final String table,
+			final Map<String, Class<?>> fields, final Class<?> maClasse) {
 		this.maClasse = maClasse;
 		this.table = table;
 		this.fields = fields;
@@ -108,7 +109,7 @@ public class DataMapperGenerique<T extends domaine.IPersonne> {
 				ps.setInt(i, (Integer) r);
 			} else if (e.getValue() == Date.class) {
 				ps.setDate(i, (Date) r);
-			} else if (e.getValue() == Boolean.class){
+			} else if (e.getValue() == Boolean.class) {
 				ps.setBoolean(i, (Boolean) r);
 			}
 		}
@@ -136,11 +137,11 @@ public class DataMapperGenerique<T extends domaine.IPersonne> {
 				// les champs du " INSERT INTO (...)"
 				req += " AND ";
 			}
-			req+= e.getKey()+" = ?";
+			req += e.getKey() + " = ?";
 			first = false;
 		}
-		req = "DELETE FROM " + table + " WHERE "+ req;
-		
+		req = "DELETE FROM " + table + " WHERE " + req;
+
 		System.out.println(req);
 		// La construction de la requête préparée est terminée. On peut la
 		// passer dans le prepareStatement.
@@ -173,13 +174,13 @@ public class DataMapperGenerique<T extends domaine.IPersonne> {
 				ps.setInt(i, (Integer) r);
 			} else if (e.getValue() == Date.class) {
 				ps.setDate(i, (Date) r);
-			} else if (e.getValue() == Boolean.class){
+			} else if (e.getValue() == Boolean.class) {
 				ps.setBoolean(i, (Boolean) r);
 			}
 		}
-		
+
 		ps.executeUpdate();
-		
+
 	}
 
 	/**
@@ -206,19 +207,20 @@ public class DataMapperGenerique<T extends domaine.IPersonne> {
 			req += e.getKey() + " = ?";
 			first = false;
 		}
-		
+
 		// UPDATE personne SET nom=?, prenom=? WHERE id=?
 		// 1 <== p.getNom() // avec la reflexion
 		// 2 <== p.getPrenom() // avec la reflexion
-		// 3 <== p.getId(); // pas besoin de la reflexion car T implements IDomainObject 
+		// 3 <== p.getId(); // pas besoin de la reflexion car T implements
+		// IDomainObject
 		req = "UPDATE " + table + req + " WHERE id = ?";
-		
+
 		System.out.println(req);
 
 		// La construction de la requête préparée est terminée. On peut la
 		// passer dans le prepareStatement.
 		PreparedStatement ps = DBConfig.getConnection().prepareStatement(req);
-		
+
 		int i = 0;
 		// On récupére le nom des champs de la table dans lesquels on fait une
 		// insertion
@@ -226,7 +228,7 @@ public class DataMapperGenerique<T extends domaine.IPersonne> {
 			i++;
 			String key = e.getKey(); // nom du champ
 			// On construit le nom du getter correspondant au nom du champ
-			System.out.println("m "+key);
+			System.out.println("m " + key);
 			String name = "get" + key.substring(0, 1).toUpperCase()
 					+ key.substring(1);
 			Method m = maClasse.getMethod(name);
@@ -237,99 +239,123 @@ public class DataMapperGenerique<T extends domaine.IPersonne> {
 
 			if (e.getValue() != r.getClass()) {
 				// TODO: gérer exception lorsque la méthode n'existe pas dans
-				
+
 			}
 			// On remplie les "?" de la requête préparée en fonction du type des
 			// champs
-			
+
 			if (e.getValue() == String.class) {
-				//System.out.println("string " +r);
+				// System.out.println("string " +r);
 				ps.setString(i, (String) r);
 			} else if (e.getValue() == Integer.class) {
-				//System.out.println("int "+r);
+				// System.out.println("int "+r);
 				ps.setInt(i, (Integer) r);
 			} else if (e.getValue() == Date.class) {
-				//System.out.println("date "+r);
+				// System.out.println("date "+r);
 				ps.setDate(i, (Date) r);
 			} else if (e.getValue() == Boolean.class) {
-				//System.out.println("bool "+r);
+				// System.out.println("bool "+r);
 				ps.setBoolean(i, (Boolean) r);
-			} else if (e.getValue() == Personne.class){
-				
+			} else if (e.getValue() == Personne.class) {
+
 			}
 		}
 		ps.setInt(++i, p.getId());
-		//System.out.println(ps);
+		// System.out.println(ps);
 		ps.executeUpdate();
 	}
-	
+
 	/**
-	 *  Permet de retrouver un objet en base gr�ce � son identifiant.
-	 *  
-	 * @param id l'identifiant de l'objet que l'on cherche
-	 * @return T Un objet Correspondant au type de T g�n�rique
+	 * Permet de retrouver un objet en base grace a son identifiant.
+	 * 
+	 * @param id
+	 *            l'identifiant de l'objet que l'on cherche
+	 * @return T Un objet Correspondant au type de T generique
 	 * @throws SQLException
 	 */
 	@SuppressWarnings("unchecked")
-	public T findById(final int id) throws SQLException{
+	public T findById(final int id) throws SQLException {
 
-		if(reference.containsKey(id)){
-			System.out.println("si mon objet de type "+maClasse+" existe je le retourne");
+		if (reference.containsKey(id)) {
+			System.out.println("si mon objet de type " + maClasse
+					+ " existe je le retourne");
 			return reference.get(id).get();
 		}
-		//On part du principe que pour tout les types d'objet l'identifiant est contenu dans un champ nomm� "id"
+		// On part du principe que pour tout les types d'objet, l'identifiant
+		// est contenu dans un champ nomme "id"
 		System.out.println("on recherche par l'id");
-		String req = "SELECT * FROM "+table+" WHERE id = ?";
+		String req = "SELECT * FROM " + table + " WHERE id = ?";
 		PreparedStatement ps = DBConfig.getConnection().prepareStatement(req);
 
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
-		
-		if(rs.next()){
-			if(this.maClasse == Personne.class){
-				System.out.println("je ne contient pas "+rs.getString("id")+" on le crée");
-			
-				Personne p = new Personne(rs.getInt("id"),rs.getString("nom"), rs.getString("prenom"), rs.getString("evaluation"), null);
-					p.setA_pour_pere(new VirtualProxyGeneriqueBuilder< IPersonne > (IPersonne.class, new PersonneFactory(rs.getInt("a_pour_pere"))).getProxy());
-				p.setLesFils(new VirtualProxyGeneriqueBuilder< List<IPersonne> > (List.class, new ListFilsPersonne(p.getId())).getProxy());
+
+		if (rs.next()) {
+			if (this.maClasse == Personne.class) {
+				System.out.println("je ne contient pas " + rs.getString("id")
+						+ " on le crée");
+
+				Personne p = new Personne(rs.getInt("id"), rs.getString("nom"),
+						rs.getString("prenom"), rs.getString("evaluation"),
+						null);
+				p.setA_pour_pere(new VirtualProxyGeneriqueBuilder<IPersonne>(
+						IPersonne.class, new PersonneFactory(rs
+								.getInt("a_pour_pere"))).getProxy());
+				p.setLesFils(new VirtualProxyGeneriqueBuilder<List<IPersonne>>(
+						List.class, new ListFilsPersonne(p.getId())).getProxy());
 				p.add(UnitOfWork.getInstance());
 				return (T) p;
 			}
 		}
-		return null;		
+		return null;
 	}
+
+	/**
+	 * Permet de retrouver l'ensemble des fils d'une personne dont l'identifiant
+	 * est passé en paramètre. On retourne une liste de personnes qui sont fils.
+	 * 
+	 * @param id
+	 *            de la personne dont on chercher les fils
+	 * @return l'ensemble des fils d'une personne
+	 * @throws SQLException
+	 */
 	@SuppressWarnings("unchecked")
 	public List<T> findFilsOf(final int id) throws SQLException {
-		//On part du principe que pour tout les types d'objet l'identifiant est contenu dans un champ nomm� "id"
+		// On part du principe que pour tout les types d'objet l'identifiant est
+		// contenu dans un champ nomm� "id"
 		System.out.println("on recherche les fils");
-		String req = "SELECT * FROM "+table+" WHERE a_pour_pere = ?";
+		String req = "SELECT * FROM " + table + " WHERE a_pour_pere = ?";
 		PreparedStatement ps = DBConfig.getConnection().prepareStatement(req);
 		List<T> t = new ArrayList<T>();
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
-		
-		while(rs.next()){
-			if(reference.containsKey(rs.getInt("id"))){
-				System.out.println("si le fils existe je l'ajoute ");
+
+		while (rs.next()) {
+			if (reference.containsKey(rs.getInt("id"))) {
+				System.out.println("si le fils existe, on l'ajoute ");
 				t.add(reference.get(rs.getInt("id")).get());
-			}else{
-				System.out.println("le fils n'existe pas, je le créer et l'ajoute");
-				if(this.maClasse == Personne.class){
-					System.out.println("je en contient pas "+rs.getString("id")+" je le créer");
-					
-					Personne p = new Personne(rs.getInt("id"),rs.getString("nom"), rs.getString("prenom"), rs.getString("evaluation"), null);
-					p.setA_pour_pere(new VirtualProxyGeneriqueBuilder< IPersonne > (IPersonne.class, new PersonneFactory(id)).getProxy());
-					p.setLesFils(new VirtualProxyGeneriqueBuilder< List<IPersonne> > (List.class, new ListFilsPersonne(p.getId())).getProxy());
+			} else {
+				System.out
+						.println("le fils n'existe pas, on le crée et l'ajoute");
+				if (this.maClasse == Personne.class) {
+					System.out.println("on ne contient pas "
+							+ rs.getString("id") + " on le crée");
+
+					Personne p = new Personne(rs.getInt("id"),
+							rs.getString("nom"), rs.getString("prenom"),
+							rs.getString("evaluation"), null);
+					p.setA_pour_pere(new VirtualProxyGeneriqueBuilder<IPersonne>(
+							IPersonne.class, new PersonneFactory(id))
+							.getProxy());
+					p.setLesFils(new VirtualProxyGeneriqueBuilder<List<IPersonne>>(
+							List.class, new ListFilsPersonne(p.getId()))
+							.getProxy());
 					p.add(UnitOfWork.getInstance());
-					t.add((T)p);
+					t.add((T) p);
 				}
 			}
 		}
-		
+
 		return t;
 	}
-
-	
-
-	// TODO : créer autres méthodes findWithCondition, etc..
 }

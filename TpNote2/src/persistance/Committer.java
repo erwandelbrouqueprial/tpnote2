@@ -8,7 +8,7 @@ import services.VisiteurPersonne;
 
 /**
  * @author erwan
- *
+ *	
  */
 public class Committer extends VisiteurPersonne {
 
@@ -19,7 +19,6 @@ public class Committer extends VisiteurPersonne {
 			System.out.println("on met à jour "+p.getNom());
 			dmgP.update(p);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

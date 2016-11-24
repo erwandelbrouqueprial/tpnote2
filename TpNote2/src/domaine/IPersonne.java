@@ -5,7 +5,11 @@ import java.util.List;
 import services.ObservablePersonne;
 import services.VisitablePersonne;
 
-public interface IPersonne extends ObservablePersonne,VisitablePersonne{
+/**
+ * @author six Interfaxe IPersponne, utile pour les obstervators et les visitors
+ *         notamment.
+ */
+public interface IPersonne extends ObservablePersonne, VisitablePersonne {
 
 	/**
 	 * @return l'identifiant de la personne

@@ -16,56 +16,67 @@ import javax.swing.JPanel;
 import domaine.IPersonne;
 
 /**
- * @author erwan
- *
+ * @author erwan Panel représentant la partie qui dévoile les informations de la
+ *         personne qui se connecte à l'application
  */
 
-public class PanelInfoPersonne extends JPanel implements ActionListener{
-	
-	/**
-	 * 
-	 */
+public class PanelInfoPersonne extends JPanel implements ActionListener {
+
 	private static final long serialVersionUID = 3995084449410919521L;
-	
+
 	private JPanel btnAn;
 	private JButton b;
 	private JFrame last;
 	private JFrame current;
-	
-	public PanelInfoPersonne(IPersonne p,JFrame last, JFrame current){
+
+	/**
+	 * Construction de la fenêtre
+	 * 
+	 * @param p
+	 * @param last
+	 * @param current
+	 */
+	public PanelInfoPersonne(IPersonne p, JFrame last, JFrame current) {
 		this.last = last;
 		this.current = current;
 		setLayout(new BorderLayout());
 		Box b1 = Box.createVerticalBox();
-		JLabel nom = new JLabel("votre nom: "+p.getNom());
+		JLabel nom = new JLabel("votre nom: " + p.getNom());
 		b1.add(nom);
-		JLabel pre = new JLabel("votre prenom: "+p.getPrenom());
+		JLabel pre = new JLabel("votre prenom: " + p.getPrenom());
 		b1.add(pre);
 		JLabel eval = null;
-		if(!p.getEvaluation().isEmpty()){
-			eval = new JLabel("votre évaluation: "+p.getEvaluation());
+		if (!p.getEvaluation().isEmpty()) {
+			eval = new JLabel("votre évaluation: " + p.getEvaluation());
 		} else {
 			eval = new JLabel("votre évaluation: Aucune évaluation");
 		}
 		b1.add(eval);
 		JLabel LabelPere = null;
 		IPersonne pere = p.getA_pour_pere();
-		if(pere != null){
-			LabelPere = new JLabel("Votre père: "+p.getA_pour_pere().getNom());
-		}else{
+		if (pere != null) {
+			LabelPere = new JLabel("Votre père: " + p.getA_pour_pere().getNom());
+		} else {
 			LabelPere = new JLabel("Votre père: Vous êtes orphelin");
 		}
 		b1.add(LabelPere);
 		btnAn = new JPanel();
-		
-		add(b1,BorderLayout.WEST);
+
+		add(b1, BorderLayout.WEST);
 		b = new JButton("annuler");
 		b.addActionListener(this);
 		btnAn.add(b);
-		add(btnAn,BorderLayout.EAST);
+		add(btnAn, BorderLayout.EAST);
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == b){
+		if (e.getSource() == b) {
 			current.dispose();
 			last.setVisible(true);
 		}
